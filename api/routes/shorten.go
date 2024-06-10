@@ -1,8 +1,12 @@
 package routes
 
 import (
-	"time"
 	"os"
+	"time"
+	"url-shortener/helpers"
+
+	"github.com.kshitijk4poor/url-shortener/database"
+	"github.com/go-redis/redis"
 	"github.com/gofiber/fiber"
 )
 
@@ -28,6 +32,28 @@ func ShortenURL(c *fiber.Ctx) error {
 	}
 
 	// rate limiting
+	r2 := database.CreateClient(1)
+	defer r2.Close()
+	val, err := r2.Get(database.Ctx, c.IP()).Result()
+	if err == redis.Nil {
+		// set expiry to 12 hours
+		_ = r2.Set(database.Ctx, c.IP(), os.Getenv("API_QUOTA"), time.Minute*30).Err()
+	} else{
+			val, _ = r2.Get(database.Ctx, c.IP()).Result()
+			valInt, _ := strconv.Atoi(val)
+			if valInt <= 0 {
+				return c.Status(fiber.StatusTooManyRequests).
+					JSON(fiber.Map{"error": "Rate limit reached"})
+			}
+		}
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).
+				JSON(fiber.Map{"error": err.Error()})
+		}
+	}
+
+	
+
 
 	// check if url already exists
 	if !govalidator.IsURL(body.URL) {
@@ -44,4 +70,7 @@ func ShortenURL(c *fiber.Ctx) error {
 	// enforce https
 
 	body.URL = helpers.EnforceHTTP(body.URL)
+
+	r2.Decr(database.Ctx, c.IP())
+
 }
