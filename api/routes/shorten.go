@@ -7,8 +7,8 @@ import (
 	"url-shortener/helpers"
 	"github.com/asaskevich/govalidator"
 	"github.com/google/uuid"
-	"https://github.com/kshitijk4poor/golang-url-shortener/database"
-	"https://github.com/kshitijk4poor/golang-url-shortener/helpers"
+	"github.com/kshitijk4poor/golang-url-shortener/database"
+	"github.com/kshitijk4poor/golang-url-shortener/helpers"
 	"github.com/go-redis/redis"
 	"github.com/gofiber/fiber"
 )
