@@ -3,9 +3,12 @@ package routes
 import (
 	"os"
 	"time"
+	"strconv"
 	"url-shortener/helpers"
-
-	"github.com.kshitijk4poor/url-shortener/database"
+	"github.com/asaskevich/govalidator"
+	"github.com/google/uuid"
+	"https://github.com/kshitijk4poor/golang-url-shortener/database"
+	"https://github.com/kshitijk4poor/golang-url-shortener/helpers"
 	"github.com/go-redis/redis"
 	"github.com/gofiber/fiber"
 )
@@ -108,5 +111,12 @@ func ShortenURL(c *fiber.Ctx) error {
 	r2.Decr(database.Ctx, c.IP())
 
 	val,_ =  r2.Get(database.Ctx, c.IP()).Result()
-	Resp.ratel
+	Resp.rateRemaining, _ = strconv.Atoi(val)
+
+	ttl, _ := r2.TTL(database.Ctx, C.IP()).Result()
+	resp.XrateLimitReset = time.Duration(ttl) / time.Minute
+
+	resp.CustomShort = os.Getenv("DOMAIN") + "/" + id
+
+	return c.Status(fiber.StatusCreated).JSON(resp)
 }
