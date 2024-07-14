@@ -1,7 +1,6 @@
 # 🚀 GoShort: Lightning-Fast URL Shortener
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/kshitijk4poor/golang-url-shortener)](https://goreportcard.com/report/github.com/kshitijk4poor/golang-url-shortener))
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kshitijk4poor/golang-url-shortener)](https://goreportcard.com/report/github.com/kshitijk4poor/golang-url-shortener)
 
 GoShort is a high-performance URL shortener built with Go, Redis, and Docker. It's designed to be fast, reliable, and easy to deploy. 🏎️💨
 
